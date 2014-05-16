@@ -1,0 +1,60 @@
+############################################
+####              DataBase              ####
+############################################
+
+usedb: false
+host: localhost
+port: 3306
+user: root
+pass: "" 
+name: database
+
+############################################
+####          Config the plugin         ####
+############################################
+
+prefix: '&8&l[&2C&4PVP&8]&r '
+surprise-enabled-in-projectile: true
+enabled-item-exit: true
+coins-per-kills-min: 10
+
+############################################
+####         Message translation        ####
+############################################
+
+arena-not-found: '&4&lArena no encontrada! :('
+your-has-joined-the-arena: '&f&l[&2+&f] &2Te has unido a la partida!'
+player-has-joined-the-arena: '&f&l[&2+&f] &3%player% &2se ha unido a la partida!'
+your-has-left-the-arena: '&f&l[&4-&f] &2Has abandonado la partida!'
+player-has-left-the-arena: '&f&l[&4-&f] &3%player% &2ha abandonado la partida!'
+leave-Arena-item-title: '&e&lSalir de la arena!'
+clic-to-left-arena: 'Clic derecho para dejar la arena!'
+command-join-arena: '&8Ingresa a una arena.'
+command-leave-arena: '&8Sal de la arena.'
+command-list-arenas: '&8Lista de arenas disponibles.'
+command-create-arena: '&8Creas una arena.'
+command-addspawn-arena: '&8Agregas puntos de spawns en la arena.'
+command-addrespawn-arena: '&8Agregas puntos de respawns en la arena.'
+command-cancel-srena: '&8Cancela la creacion de la arena.'
+command-save-arena: '&8Guardas la arena.'
+command-remove-arena: '&8Eliminas una arena.'
+command-reload-plugin: '&8Recargar configuracion.'
+foot-command-help: '&f[]&c ------ &f[ &6GRACIAS POR JUGAR :D &f] &c------ &f[]'
+no-permissions: '&4No tienes permiso de ver esto!'
+help-join-command: '&5Entra a una arena con &f/cp join &c[&fidArena&c]&5.'
+help-leave-command: '&5Sal de una arena con &f/cp leave&5.'
+help-list-command: '&5Ve las arenas disponibles con &f/cp list&5.'
+help-create-command: '&2Arena creada! agrega spawns con &f/cpa addspawn&2. Escribe &f/cpa save &2para guardar la arena.'
+help-remove-command: '&2Eliminas una arena con &f/cpa remove [idArena]&2.'
+msg-addspawn: '&2Spawn agregado!'
+msg-addrespawn: '&2Respawn agregado! Escribe &f/cpa save &2 para guardar los cambios!'
+msg-save-arena: '&2Arena guardada!, Escribe /cpa reload para recargar el plugin.'
+msg-cancel-arena: '&2Arena borrada!'
+msg-remove-arena: '&2Arena borrada!'
+msg-reload-arena: '&2Configuracion recargada!'
+no-msg-in-game: '&4No puedes usar comandos dentro de la arena, solo &2/cp leave&4.'
+add-start-arena: 'La arena %na% esta por empezar, escribe /cp join %na% para entrar!'
+get-coins: '&2&lHas obtenido %n% coins!'
+sing-line-1: 'Clic derecho'
+sing-line-2: 'para abrir el'
+sing-line-3: 'menu.'
