@@ -1,0 +1,41 @@
+name: CreativoPVP
+main: es.hol.iberians.CPVP
+description: A KitPvp variation
+version: 1.0
+author: jesus997
+prefix: CPVP
+commands:
+  cpa:
+    description: Muestra la ayuda del plugin.
+    user: Escribe /<command> para obtener ayuda.
+  cp:
+    description: Muestra la ayuda del plugin.
+    user: Escribe /<command> para obtener ayuda.
+permissions:
+  cpvp.*:
+        description: Acceso a todos los comandos del plugin
+        children:
+            cpvp.help: true
+            cpvp.create-arena: true
+            cpvp.fsa: true
+            cpvp.fea: true
+            cpvp.join: true
+            cpvp.list: true
+  cpvp.help:
+        description: Permite crear una arena y sus derivados (spawn y respawn.
+        default: op
+  cpvp.create-arena:
+        description: Permite editar la arena.
+        default: op
+  cpvp.fsa:
+        description: Fuerza inicio de la arena
+        default: op
+  cpvp.fea:
+        description: Fuerza final de la arena
+        default: op
+  cpvp.join:
+        description: Entra a una arena
+        default: op
+  cpvp.list:
+        description: Muestra una lista de las arenas disponibles
+        default: op
