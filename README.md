@@ -25,4 +25,4 @@ Imagine a mini-game where you choose your own kit and that does not end. *Creati
 
 *This project is open source, so can modify it as much as they want. If you are a good person, you'll know what to do with the credits :D*
 
-*This plugin was made to [Iberians Network,](http://www.iberians.hol.es) appreciate your visit :D *
+*This plugin was made to [Iberians Network,](http://www.iberians.hol.es) appreciate your visit :D*
