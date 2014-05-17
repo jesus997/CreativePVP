@@ -94,7 +94,7 @@ public class CommandAdmin implements CommandExecutor{
             }
         }else if(args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("r+")){
             if(p.hasPermission("cp.admin")){
-                this.pl.reloadConfig();
+                pl.reloadConfigYML();
                 ArenaManager.getManager().sendMessage(CPVP.cfg.getString("msg-reload-arena"), p);
             }
         }
