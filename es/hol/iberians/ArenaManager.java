@@ -3,6 +3,7 @@ package es.hol.iberians;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -21,6 +22,10 @@ public class ArenaManager {
     private int arenaSize = 0;
     private HashMap<String, ItemStack[]> inventory = new HashMap<>();
     private HashMap<String, ItemStack[]> armor = new HashMap<>();
+    private HashMap<String, Float> exp = new HashMap<>();
+    private HashMap<String, Integer> lev = new HashMap<>();
+    private HashMap<String, Double> life = new HashMap<>();
+    private HashMap<String, Integer> food = new HashMap<>();
     private HashMap<String, Location> locs = new HashMap<>();
     private String prefix = CPVP.cfg.getString("prefix");
     public HashMap<String, Integer> killstemp = new HashMap<>();
@@ -63,6 +68,10 @@ public class ArenaManager {
         }
         inventory.put(p.getName(), p.getInventory().getContents());
         armor.put(p.getName(), p.getInventory().getArmorContents());
+        exp.put(p.getName(), p.getExp());
+        lev.put(p.getName(), p.getLevel());
+        life.put(p.getName(), p.getHealth());
+        food.put(p.getName(), p.getFoodLevel());
         locs.put(p.getName(), p.getLocation());
         p.getInventory().clear();
         p.getInventory().setArmorContents(null);
@@ -70,6 +79,8 @@ public class ArenaManager {
         a.getPlayers().add(p.getName());
         p.setHealth(p.getMaxHealth());
         p.setFoodLevel(20);
+        p.setExp(0);
+        p.setLevel(0);
         p.teleport(a.getNextSpawn());
         a.getUsedSpawns().put(p.getName(), a.getNextSpawn());
         p.setGameMode(GameMode.CREATIVE);
@@ -83,10 +94,11 @@ public class ArenaManager {
             p.getInventory().setItem(8, item);
         }
         p.setScoreboard(a.getSBApi().getBoard("arena" + a.getId()));
+        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix) + ChatColor.DARK_GREEN + "" + p.getName() + " ha entrado a la arena " + a.getId());
     }
 
     @SuppressWarnings("deprecation")
-    public void removePlayer(Player p) {
+    public void removePlayer(final Player p) {
         if(getArena(p) == null){
             return;
         }
@@ -100,10 +112,16 @@ public class ArenaManager {
         p.getInventory().setContents(inventory.get(p.getName()));
         inventory.remove(p.getName());
         p.getInventory().setArmorContents(armor.get(p.getName()));
-        armor.remove(p.getName());
+        armor.remove(p.getName()); 
         p.updateInventory();
-        p.setExp(0);
-        p.setLevel(0);
+        p.setHealth(life.get(p.getName()));
+        life.remove(p.getName());
+        p.setFoodLevel(food.get(p.getName()));
+        food.remove(p.getName());
+        p.setExp(exp.get(p.getName()));
+        exp.remove(p.getName());
+        p.setLevel(lev.get(p.getName()));
+        lev.remove(p.getName());
         p.teleport(locs.get(p.getName()));
         p.setGameMode(GameMode.SURVIVAL);
         locs.remove(p.getName());
@@ -111,6 +129,7 @@ public class ArenaManager {
         for(String str: a.getPlayers()) {
                 this.sendMessage(CPVP.cfg.getString("player-has-left-the-arena"), Bukkit.getPlayerExact(str));
         }
+        Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix) + ChatColor.DARK_RED + "" + p.getName() + " ha salido de la arena " + a.getId());
     }
 
     public List<Arena> getArenas() {
@@ -193,7 +212,7 @@ public class ArenaManager {
             menu.setOption(0, new ItemStack(Material.BEDROCK, 1), "No arenas!", "This server hasn't setup any arenas yet!");
         }
         for(int i2 = 0; i2 < ArenaManager.getManager().getArenas().size(); i2++) {
-            menu.setOption(i2, new ItemStack(Material.BEDROCK, 1), "" + ArenaManager.getManager().getArenas().get(i2).getId(), "Click to join");
+            menu.setOption(i2, new ItemStack(Material.NETHER_STAR, 1), "" + ArenaManager.getManager().getArenas().get(i2).getId(), "Click to join");
         }
         menu.open(p);
     }
@@ -227,4 +246,5 @@ public class ArenaManager {
     public HashMap getDeaths(){
         return this.deaths;
     }
+    
 }
