@@ -13,7 +13,7 @@ public class LobbyTimer {
 		this.pl = pl;
 	}
 	public void start() {
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(this.pl, new Runnable() {
+		/*Bukkit.getScheduler().scheduleSyncRepeatingTask(this.pl, new Runnable() {
 			@Override
 			public void run() {
 				for(Arena a: ArenaManager.getManager().getArenas()) {
@@ -72,7 +72,7 @@ public class LobbyTimer {
                                     }
 				}
 			}
-		}, 0L, 20L);
+		}, 0L, 20L);*/
 
 	}
 }
