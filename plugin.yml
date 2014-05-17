@@ -1,6 +1,6 @@
 name: CreativoPVP
 main: es.hol.iberians.CPVP
-description: A KitPvp variation
+description: Crea una arena con una zona donde el creativo esta activo y otra donde lo esta el pvp. El usuario debe equiparse en la primera zona como quiera y despues ir a luchar a la zona pvp.
 version: 1.0
 author: jesus997
 prefix: CPVP
@@ -15,27 +15,27 @@ permissions:
   cpvp.*:
         description: Acceso a todos los comandos del plugin
         children:
-            cpvp.help: true
-            cpvp.create-arena: true
-            cpvp.fsa: true
-            cpvp.fea: true
-            cpvp.join: true
-            cpvp.list: true
-  cpvp.help:
-        description: Permite crear una arena y sus derivados (spawn y respawn.
+            cp.help: true
+            cp.join: true
+            cp.list: true
+            cp.admin: true
+            cp.reglife: true
+            cp.reglifevip: true
+  cp.help:
+        description: Muestra la ayuda del plugin
         default: op
-  cpvp.create-arena:
-        description: Permite editar la arena.
-        default: op
-  cpvp.fsa:
-        description: Fuerza inicio de la arena
-        default: op
-  cpvp.fea:
-        description: Fuerza final de la arena
-        default: op
-  cpvp.join:
+  cp.join:
         description: Entra a una arena
         default: op
-  cpvp.list:
-        description: Muestra una lista de las arenas disponibles
+  cp.list:
+        description: Muestra la lista de arenas disponibles
+        default: op
+  cp.admin:
+        description: Da permisos de administrador para el plugin.
+        default: op
+  cp.reglife:
+        description: Regenera la vida a un jugador comun.
+        default: true
+  cp.reglifevip:
+        description: Regenera la vida a un jugador vip.
         default: op
