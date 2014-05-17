@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -25,7 +26,7 @@ public class CPVP extends JavaPlugin{
 		DatabaseMan.pass = this.getConfig().getString("pass");
 		DatabaseMan.db = this.getConfig().getString("name");
 		DatabaseMan.connect();
-                new DatabaseMan().update("CREATE TABLE IF NOT EXISTS `scores` (" + "`id` int(11) NOT NULL AUTO_INCREMENT," + "`username` varchar(32) NOT NULL," + "`kills` int(11) NOT NULL," + "`deaths` int(11) NOT NULL," + "`coins` int(11) NOT NULL, " + "`level` int(11) NOT NULL, " + "'exp' int(11) NOT NULL, " + "PRIMARY KEY (`id`)" + ") ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
+                new DatabaseMan().update("CREATE TABLE IF NOT EXISTS `scores` (" + "`id` int(11) NOT NULL AUTO_INCREMENT," + "`username` varchar(32) NOT NULL," + "`kills` int(11) NOT NULL," + "`deaths` int(11) NOT NULL," + "`coins` int(11) NOT NULL, " + "`level` int(11) NOT NULL, " + "`exp` int(11) NOT NULL, " + "PRIMARY KEY (`id`)" + ") ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;");
 	}
         this.getServer().getPluginManager().registerEvents(new SBWListener(this), this);
         
@@ -41,12 +42,12 @@ public class CPVP extends JavaPlugin{
             folder.mkdir();
         }
         File[] listOfFiles = folder.listFiles();
-        System.out.print("[*]--------------[ CPVP ]--------------[*]");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[*]--------------[ CPVP ]--------------[*]");
         for(File f : listOfFiles){
             loadFromFiles(f.getName());
-            System.out.print("Cargando datos de la arena: " + f.getName());
+            Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE + "Cargando datos de la arena: " + ChatColor.YELLOW + f.getName());
         }
-        System.out.print("[*]------------------------------------[*]");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_GREEN + "[*]------------------------------------[*]");
     }
     @Override
     public void onDisable(){
@@ -85,5 +86,9 @@ public class CPVP extends JavaPlugin{
         } catch (IOException e) {
                 // do you even catch bro?
         }
+    }
+    
+    public void reloadConfigYML(){
+        this.reloadConfig();
     }
 }
