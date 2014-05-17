@@ -43,6 +43,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class SBWListener implements Listener {
+        final ArrayList<Player> cooldown = new ArrayList<>();
 	private CPVP pl = null;
 	public SBWListener(CPVP pl) {
 		this.pl = pl;
@@ -62,21 +63,31 @@ public class SBWListener implements Listener {
             if(ArenaManager.getManager().isInGame(p)){
                 if(CPVP.cfg.getBoolean("usedb")){
                     new DatabaseMan().update("UPDATE `scores` SET `deaths`=`deaths`+1 WHERE `username`='" + p.getName() +"'");
-                    new DatabaseMan().update("UPDATE `scores` SET `kills`=`kills`+1 WHERE `username`='" + e.getEntity().getKiller().getName() +"'");
+                    if(e.getEntity().getKiller() instanceof Player){
+                        new DatabaseMan().update("UPDATE `scores` SET `kills`=`kills`+1 WHERE `username`='" + e.getEntity().getKiller().getName() +"'");
+                    }
                     int x = CPVP.cfg.getInt("coins-per-kills-min");
                     Random r = new Random();
-                    new DatabaseMan().update("UPDATE `scores` SET `coins`=`coins`+" + r.nextInt(x) + " WHERE `username`='" + e.getEntity().getKiller().getName() +"'");
-                    ArenaManager.getManager().sendMessage(CPVP.cfg.getString("get-coins").replaceAll("%n%", String.valueOf(r)), e.getEntity().getKiller());
+                    if(e.getEntity().getKiller() instanceof Player){
+                        new DatabaseMan().update("UPDATE `scores` SET `coins`=`coins`+" + r.nextInt(x) + " WHERE `username`='" + e.getEntity().getKiller().getName() +"'");
+                    }
+                    if(e.getEntity().getKiller() instanceof Player){
+                        ArenaManager.getManager().sendMessage(CPVP.cfg.getString("get-coins").replaceAll("%n%", String.valueOf(r)), e.getEntity().getKiller());
+                    }
                 }else{
                     int kills = ArenaManager.getManager().killstemp.get(p.getName());
-                    ArenaManager.getManager().killstemp.put(e.getEntity().getKiller().getName(), kills + 1);
+                    if(e.getEntity().getKiller() instanceof Player){
+                        ArenaManager.getManager().killstemp.put(e.getEntity().getKiller().getName(), kills + 1);
+                    }
                     int deaths = ArenaManager.getManager().deathstemp.get(p.getName());
-                    ArenaManager.getManager().killstemp.put(p.getName(), deaths + 1);
+                    ArenaManager.getManager().deathstemp.put(p.getName(), deaths + 1);
                     int coins = ArenaManager.getManager().coinstemp.get(p.getName());
                     Random r = new Random();
                     int x = CPVP.cfg.getInt("coins-per-kills-min");
                     ArenaManager.getManager().coinstemp.put(p.getName(), coins + r.nextInt(x));
-                    ArenaManager.getManager().sendMessage(CPVP.cfg.getString("get-coins").replaceAll("%n%", String.valueOf(r)), e.getEntity().getKiller());
+                    if(e.getEntity().getKiller() instanceof Player){
+                        ArenaManager.getManager().sendMessage(CPVP.cfg.getString("get-coins").replaceAll("%n%", String.valueOf(r)), e.getEntity().getKiller());
+                    }
                 }
                 if(ArenaManager.getManager().isInGame(p)){
                     e.getDrops().clear();
@@ -153,15 +164,54 @@ public class SBWListener implements Listener {
 	}
 	@EventHandler
 	public void onSignEdit(SignChangeEvent e) {
-		if(!e.getPlayer().hasPermission("cp.createsign")) 
+		if(!e.getPlayer().hasPermission("cp.admin")) 
 			return;
-		if(e.getLine(0).equalsIgnoreCase("[CreativePVP]") || e.getLine(0).equalsIgnoreCase("[CPVP]")) {
+		if(e.getLine(0).equalsIgnoreCase("[CPVP]") && e.getLine(1).equalsIgnoreCase("menu")) {
 			e.setLine(0, ChatColor.translateAlternateColorCodes('&', "&2&lC&4&lPVP"));
                         e.setLine(1, ChatColor.DARK_GRAY + CPVP.cfg.getString("sing-line-1"));
                         e.setLine(2, ChatColor.DARK_GRAY + CPVP.cfg.getString("sing-line-2"));
                         e.setLine(3, ChatColor.DARK_GRAY + CPVP.cfg.getString("sing-line-3"));
 		}
 	}
+        
+        @EventHandler
+        public void onSignEdit2(SignChangeEvent e) {
+            if(!e.getPlayer().hasPermission("cp.admin")){
+                return;
+            }
+            if(e.getLine(0).equalsIgnoreCase("[CPVP]") && e.getLine(1).equalsIgnoreCase("life-user")) {
+                e.setLine(0, ChatColor.translateAlternateColorCodes('&', "&2&lLIFE"));
+                e.setLine(1, ChatColor.GOLD + CPVP.cfg.getString("sing-life-line-1"));
+                e.setLine(2, ChatColor.GOLD + CPVP.cfg.getString("sing-life-line-2"));
+                e.setLine(3, ChatColor.GOLD + CPVP.cfg.getString("sing-life-line-3"));
+            }
+        }
+        
+        @EventHandler
+        public void onSignEdit3(SignChangeEvent e) {
+            if(!e.getPlayer().hasPermission("cp.admin")){
+                return;
+            }
+            if(e.getLine(0).equalsIgnoreCase("[CPVP]") && e.getLine(1).equalsIgnoreCase("life-vip")) {
+                e.setLine(0, ChatColor.translateAlternateColorCodes('&', "&c&lLIFE-VIP"));
+                e.setLine(1, ChatColor.GOLD + CPVP.cfg.getString("sing-life-vip-line-1"));
+                e.setLine(2, ChatColor.GOLD + CPVP.cfg.getString("sing-life-vip-line-2"));
+                e.setLine(3, ChatColor.GOLD + CPVP.cfg.getString("sing-life-vip-line-3"));
+            }
+        }
+        
+        @EventHandler
+        public void onSignEdit4(SignChangeEvent e) {
+            if(!e.getPlayer().hasPermission("cp.admin")){
+                return;
+            }
+            if(e.getLine(0).equalsIgnoreCase("[CPVP]") && e.getLine(1).equalsIgnoreCase("exit")) {
+                e.setLine(0, ChatColor.translateAlternateColorCodes('&', "&2&lSALIDA"));
+                e.setLine(1, ChatColor.DARK_GRAY + CPVP.cfg.getString("sing-exit-line-1"));
+                e.setLine(2, ChatColor.DARK_GRAY + CPVP.cfg.getString("sing-exit-line-2"));
+                e.setLine(3, ChatColor.DARK_GRAY + CPVP.cfg.getString("sing-exit-line-3"));
+            }
+        }     
         
 	@EventHandler
         public void onPlayerCommandBlock(PlayerCommandPreprocessEvent e){
@@ -205,13 +255,107 @@ public class SBWListener implements Listener {
                                         menu.setOption(0, new ItemStack(Material.BEDROCK, 1), "No arenas!", "This server hasn't setup any arenas yet!");
                                     }
                                     for(int i2 = 0; i2 < ArenaManager.getManager().getArenas().size(); i2++) {
-                                        menu.setOption(i2, new ItemStack(Material.PAPER, 1), "" + ArenaManager.getManager().getArenas().get(i2).getId(), "Click to join");
+                                        menu.setOption(i2, new ItemStack(Material.NETHER_STAR, 1), "" + ArenaManager.getManager().getArenas().get(i2).getId(), "Click to join");
                                     }
                                     menu.open(e.getPlayer()); 
 				}
 			}
 		}
 	}
+        
+        @EventHandler
+	public void onSignRightClick2(PlayerInteractEvent e) {
+		if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			if(e.getClickedBlock().getState() instanceof Sign) {
+				Sign s = (Sign) e.getClickedBlock().getState();
+				if(s.getLine(0).equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', "&2&lLIFE"))) {
+                                    final Player p = e.getPlayer(); 
+                                    if(p.hasPermission("cp.reglife")){
+                                        if(ArenaManager.getManager().isInGame(p)){
+                                            if(p.getHealth() == p.getMaxHealth()){
+                                                ArenaManager.getManager().sendMessage("&4&lYa tienes el maximo de vida!", p);
+                                                return;
+                                            }
+                                            double h = p.getHealth();
+                                            double d = h+5;
+                                            if(cooldown.contains(p)){
+                                                ArenaManager.getManager().sendMessage("&4&lUsa este cartel en unos segundos mas.", p);
+                                                return;
+                                            }
+                                            if(d>20){
+                                                p.setHealth(20); 
+                                            }else{
+                                                p.setHealth(d);
+                                            }
+                                            cooldown.add(p);
+                                            ArenaManager.getManager().sendMessage("&4&lVida Regenerada!, &cespera 1 minuto para volver a usar el cartel.", p);
+                                            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable(){
+                                                @Override 
+                                                public void run(){
+                                                    cooldown.remove(p);
+                                                    ArenaManager.getManager().sendMessage("&2Cartel de vida activado!", p);
+                                                }
+                                            }, 1200L);                                            
+                                        }
+                                    }
+                                }
+                        }
+                }
+        }
+             
+        @EventHandler
+	public void onSignRightClick3(PlayerInteractEvent e) {
+		if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			if(e.getClickedBlock().getState() instanceof Sign) {
+				Sign s = (Sign) e.getClickedBlock().getState();
+				if(s.getLine(0).equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', "&c&lLIFE-VIP"))) {
+                                    final Player p = e.getPlayer(); 
+                                    if(p.hasPermission("cp.reglifevip")){
+                                        if(ArenaManager.getManager().isInGame(p)){
+                                            if(p.getHealth() == p.getMaxHealth()){
+                                                ArenaManager.getManager().sendMessage("&4&lYa tienes el maximo de vida!", p);
+                                                return;
+                                            }
+                                            double h = p.getHealth();
+                                            double d = h + 10;
+                                            if(cooldown.contains(p)){
+                                                ArenaManager.getManager().sendMessage("&4&lUsa este cartel en unos segundos mas.", p);
+                                                return;
+                                            }
+                                            if(d>20){
+                                                p.setHealth(20); 
+                                            }else{
+                                                p.setHealth(d);
+                                            }
+                                            cooldown.add(p);
+                                            ArenaManager.getManager().sendMessage("&4&lVida Regenerada!, &cespera 1 minuto para volver a usar el cartel.", p);
+                                            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(pl, new Runnable(){
+                                                @Override 
+                                                public void run(){
+                                                    cooldown.remove(p);
+                                                    ArenaManager.getManager().sendMessage("&2Cartel de vida activado!", p);
+                                                }
+                                            }, 1200L);  
+                                        }
+                                    }
+                                }
+                        }
+                }
+        }    
+        
+        @EventHandler
+	public void onSignRightClick4(PlayerInteractEvent e) {
+		if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			if(e.getClickedBlock().getState() instanceof Sign) {
+				Sign s = (Sign) e.getClickedBlock().getState();
+				if(s.getLine(0).equalsIgnoreCase(ChatColor.translateAlternateColorCodes('&', "&2&lSALIDA"))) {
+                                    Player p = e.getPlayer();
+                                    ArenaManager.getManager().removePlayer(p);
+                                }
+                        }
+                }
+        }
+        
 	@EventHandler
 	public void onLeave(PlayerQuitEvent e) {
 		ArenaManager.getManager().removePlayer(e.getPlayer());
